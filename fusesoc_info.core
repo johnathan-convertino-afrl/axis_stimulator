@@ -1,0 +1,38 @@
+CAPI=2:
+
+name: AFRL:simulation:axis_stimulator:1.0.0
+description: Verilog axis file I/O testing core.
+
+filesets:
+  src:
+    files:
+      - src/tm_stim_axis.v
+    file_type: verilogSource
+  
+  tb:
+    files:
+      - tb/tb_axis.v : { file_type: verilogSource }
+      - tb/test.bin  : { file_type: user, copyto: test.bin }
+      
+  dep:
+    depend:
+      - AFRL:utility:helper:1.0.0
+    
+  dep_tb:
+    depend:
+      - AFRL:simulation:clock_stimulator
+      
+  dep_vpi:
+    depend:
+      - AFRL:vpi:binary_file_io:1.0.0
+      
+targets:
+  default: &default
+    filesets: [src, dep, dep_vpi]
+  
+  sim:
+    <<: *default
+    default_tool: icarus
+    filesets_append: [tb, dep_tb]
+    toplevel: tb_axis
+    
