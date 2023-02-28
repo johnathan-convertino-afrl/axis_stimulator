@@ -27,15 +27,15 @@
 
 `timescale 1 ns/10 ps
 
-module tb_axis;
+module tb_axis #(
+  parameter OUT_FILE_NAME = in.bin,
+  parameter IN_FILE_NAME = out.bin,
+  parameter RAND_READY = 0);
   //parameter or local param bus, user and dest width? and files as well? 
   
   localparam BUS_WIDTH  = 14;
   localparam USER_WIDTH = 1;
   localparam DEST_WIDTH = 1;
-  
-  localparam CLK_PERIOD = 500;
-  localparam RST_PERIOD = 1000;
   
   wire                      tb_stim_clk;
   wire                      tb_stim_rstn;
@@ -46,12 +46,7 @@ module tb_axis;
   wire                      tb_stim_ready;
   wire [USER_WIDTH-1:0]     tb_stim_user;
   wire [DEST_WIDTH-1:0]     tb_stim_dest;
-  
-  reg         tb_cnt_clk  = 0;
-  reg         tb_cnt_rstn = 0;
-  wire [8:0]  tb_cnt_data;
-  
-  integer num_read = 0;
+  wire                      tb_eof;
   
   clk_stimulus #(
     .CLOCKS(1), // # of clocks
@@ -71,7 +66,8 @@ module tb_axis;
   slave_axis_stimulus #(
     .BUS_WIDTH(BUS_WIDTH),
     .USER_WIDTH(USER_WIDTH),
-    .DEST_WIDTH(DEST_WIDTH)
+    .DEST_WIDTH(DEST_WIDTH),
+    .FILE(IN_FILE_NAME)
   ) slave_axis_stim (
     // read
     .m_axis_aclk(tb_stim_clk),
@@ -82,13 +78,16 @@ module tb_axis;
     .m_axis_tkeep(tb_stim_keep),
     .m_axis_tlast(tb_stim_last),
     .m_axis_tuser(tb_stim_user),
-    .m_axis_tdest(tb_stim_dest)
+    .m_axis_tdest(tb_stim_dest),
+    .eof(tb_eof)
   );
 
   master_axis_stimulus #(
     .BUS_WIDTH(BUS_WIDTH),
     .USER_WIDTH(USER_WIDTH),
-    .DEST_WIDTH(DEST_WIDTH)
+    .DEST_WIDTH(DEST_WIDTH),
+    .RAND_READY(RAND_READY),
+    .FILE(OUT_FILE_NAME)
   ) master_axis_stim (
     // write
     .s_axis_aclk(tb_stim_clk),
@@ -99,7 +98,8 @@ module tb_axis;
     .s_axis_tkeep(tb_stim_keep),
     .s_axis_tlast(tb_stim_last),
     .s_axis_tuser(tb_stim_user),
-    .s_axis_tdest(tb_stim_dest)
+    .s_axis_tdest(tb_stim_dest),
+    .eof(1'b0)
   );
   
   // vcd dump command

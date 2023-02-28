@@ -52,7 +52,8 @@ module slave_axis_stimulus #(
     output reg  [BUS_WIDTH-1:0]     m_axis_tkeep, /**< master keep */
     output reg                      m_axis_tlast, /**< master last word of data */
     output reg  [USER_WIDTH-1:0]    m_axis_tuser, /**< master user port */
-    output reg  [DEST_WIDTH-1:0]    m_axis_tdest  /**< master destination port */
+    output reg  [DEST_WIDTH-1:0]    m_axis_tdest, /**< master destination port */
+    output reg                      eof           /**< end of file flag */
   );
   
   // local parameters
@@ -106,13 +107,15 @@ module slave_axis_stimulus #(
       
       r_b_fwft <= 1'b1;
       
+      eof <= 1'b0;
+      
       bytes_read = 0;
     // out of reset, run on posedge clock
     end else begin
+      eof <= eof;
       // first word fall through per axis
       
-      if(r_b_fwft || m_axis_tready)
-      begin
+      if(r_b_fwft || m_axis_tready) begin
         bytes_read = $read_binary_file(FILE, r_m_axis_tdata);
         
         rr_m_axis_tdata <= r_m_axis_tdata;
@@ -124,13 +127,12 @@ module slave_axis_stimulus #(
         
         r_b_fwft <= 1'b0;
         
-        if(bytes_read < 0)
-        begin
+        if(bytes_read < 0) begin
+          eof          <= 1'b1;
           m_axis_tlast <= 1'b1;
         end
         
-        if(bytes_read == 0)
-        begin
+        if(bytes_read == 0) begin
           rr_m_axis_tdata <= 0;
           m_axis_tkeep    <= 0;
           m_axis_tvalid   <= 1'b0;
@@ -152,6 +154,7 @@ module master_axis_stimulus #(
     parameter BUS_WIDTH   = 1,        /**< bus width in bytes for data bus */
     parameter USER_WIDTH  = 1,        /**< user width in bits */
     parameter DEST_WIDTH  = 1,        /**< dest width in bits */
+    parameter RAND_READY  = 0,        /**< random ready if set anything other than 0 */
     parameter FILE        = "out.bin" /**< output file name   */
   )
   (
@@ -164,7 +167,8 @@ module master_axis_stimulus #(
     input  [BUS_WIDTH-1:0]      s_axis_tkeep, /**< slave keep */
     input                       s_axis_tlast, /**< slave last word of data */
     input  [USER_WIDTH-1:0]     s_axis_tuser, /**< slave user port */
-    input  [DEST_WIDTH-1:0]     s_axis_tdest  /**< slave destination port */
+    input  [DEST_WIDTH-1:0]     s_axis_tdest, /**< slave destination port */
+    input                       eof           /**< end of file will trigger $finish to end sim */
   );
   
   integer num_wrote = 0;
@@ -182,16 +186,14 @@ module master_axis_stimulus #(
       num_wrote <= 0;
     // out of reset, run on posedge clock
     end else begin
-      s_axis_tready <= 1;
-
-      if(s_axis_tvalid == 1)
-      begin      
+      s_axis_tready <= (RAND_READY != 0 ? $random%2 : 1);
+      
+      if((s_axis_tvalid == 1'b1) && (s_axis_tready == 1'b1)) begin      
         num_wrote = $write_binary_file(FILE, s_axis_tdata);
-        
-        if(s_axis_tlast == 1)
-        begin
-          $finish;
-        end
+      end
+      
+      if((((s_axis_tlast == 1'b1) && (s_axis_tvalid == 1'b1)) || (eof == 1'b1)) && (s_axis_tready == 1'b1))begin
+        $finish();
       end
     end
   end

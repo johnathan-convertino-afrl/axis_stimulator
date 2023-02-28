@@ -1,5 +1,5 @@
 # AFRL Simulator Stimulator for AXIS
-## AXIS Stimulator modules
+### AXIS Stimulator modules
 ---
 
    author: Jay Convertino   
@@ -12,10 +12,9 @@
    
 ---
 
-![rtl_img](./rtl.png)
-
 ### Dependencies
 #### Build
+
   - AFRL:utility:helper:1.0.0
   - AFRL:vpi:binary_file_io:1.0.0
   
@@ -38,11 +37,18 @@ the writer module will end the simulation.
 #### TB
 
 * tb_axis.v
-* test.bin
   
 ### fusesoc
 
 * fusesoc_info.core created.
-* Simulation uses icarus to run data through the core.
+* Simulation uses icarus to run data through the core. Verification added.
 
+#### TARGETS
 
+* RUN WITH: (fusesoc run --target=sim VENDER:CORE:NAME:VERSION)
+  - default (for IP integration builds)
+  - sim
+  - sim_rand_data
+  - sim_rand_ready_rand_data
+  - sim_8bit_count_data
+  - sim_rand_ready_8bit_count_data
