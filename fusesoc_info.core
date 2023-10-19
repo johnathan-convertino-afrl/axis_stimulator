@@ -28,12 +28,12 @@ filesets:
       
 targets:
   default: &default
-    descripton: Default fileset for simulations.
+    description: Default file set.
     filesets: [src, dep, dep_vpi]
   
   sim: &sim
     <<: *default
-    descripton: Default icarus sim.
+    description: Default icarus sim.
     default_tool: icarus
     toplevel: tb_axis
     hooks:
@@ -46,7 +46,7 @@ targets:
   
   sim_rand_data:
     <<: *sim
-    descripton: Use random data as a input.
+    description: Use random data as a input.
     parameters:
       - IN_FILE_NAME=random.bin
       - OUT_FILE_NAME=out_random.bin
@@ -54,7 +54,7 @@ targets:
       
   sim_rand_ready_rand_data:
     <<: *sim
-    descripton: Use random data as a input, with random ready.
+    description: Use random data as a input, with random ready.
     parameters:
       - IN_FILE_NAME=random.bin
       - OUT_FILE_NAME=out_random.bin
@@ -62,7 +62,7 @@ targets:
       
   sim_8bit_count_data:
     <<: *sim
-    descripton: Use counter data as a input.
+    description: Use counter data as a input.
     parameters:
       - IN_FILE_NAME=8bit_count.bin
       - OUT_FILE_NAME=out_8bit_count.bin
@@ -70,7 +70,7 @@ targets:
   
   sim_rand_ready_8bit_count_data:
     <<: *sim
-    descripton: Use counter data as a input, with random ready.
+    description: Use counter data as a input, with random ready.
     parameters:
       - IN_FILE_NAME=8bit_count.bin
       - OUT_FILE_NAME=out_8bit_count.bin
