@@ -114,7 +114,6 @@ module tb_axis #(
     .RAND_READY(RAND_READY),
     .FILE(OUT_FILE_NAME)
   ) master_axis_stim (
-    // write
     .s_axis_aclk(tb_stim_clk),
     .s_axis_arstn(tb_stim_rstn),
     .s_axis_tvalid(tb_stim_valid),
