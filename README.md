@@ -1,5 +1,8 @@
 # AFRL Simulator Stimulator for AXIS
 ### AXIS Stimulator modules
+
+![image](docs/manual/img/AFRL.png)
+
 ---
 
    author: Jay Convertino   
@@ -19,7 +22,13 @@
 #### Previous
   - none
 
-### Dependencies
+### DOCUMENTATION
+  For detailed usage information, please navigate to one of the following sources. They are the same, just in a different format.
+
+  - [axis_stimulator.pdf](docs/manual/axis_stimulator.pdf)
+  - [github page](https://johnathan-convertino-afrl.github.io/axis_stimulator/)
+
+### DEPENDENCIES
 #### Build
 
   - AFRL:utility:helper:1.0.0
@@ -27,14 +36,6 @@
   
 #### Simulation
   - AFRL:simulation:clock_stimulator
-
-### IP USAGE
-#### INSTRUCTIONS
-
-This core contains two modules. A writer, and reader that should be placed on the  
-output, and input of the device under test. This will stream data through till  
-is has read all data. Then once all data has been written AND tlast is set to high  
-the writer module will end the simulation.
 
 ### COMPONENTS
 #### SRC
@@ -45,12 +46,12 @@ the writer module will end the simulation.
 
 * tb_axis.v
   
-### fusesoc
+### FUSESOC
 
 * fusesoc_info.core created.
 * Simulation uses icarus to run data through the core. Verification added.
 
-#### TARGETS
+#### Targets
 
 * RUN WITH: (fusesoc run --target=sim VENDER:CORE:NAME:VERSION)
   - default (for IP integration builds)

@@ -1,0 +1,1 @@
+﻿NDFramePage.OnPageTitleLoaded("SystemVerilogModule:slave_axis_stimulus","slave_axis_stimulus");NDSummary.OnSummaryLoaded("SystemVerilogModule:slave_axis_stimulus",[["SystemVerilog","SystemVerilog"]],[["Modules","Module"]],[[22,0,0,"slave_axis_stimulus"]]);

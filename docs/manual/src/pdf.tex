@@ -1,0 +1,22 @@
+\documentclass[usletter]{article}
+\usepackage{DejaVuSans}
+\renewcommand*\familydefault{\sfdefault}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{listings}
+\lstset{
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+\usepackage{pdfpages}
+\usepackage[hidelinks]{hyperref}
+\begin{document}
+
+  \include{src/common.tex}
+
+  %module documentation section
+
+  \includepdf[pages=-, addtotoc={1,subsection,1,axis stimulator modules,p1}, pagecommand={}]{files_tm_stim_axis-v.pdf}
+  \includepdf[pages=-, addtotoc={1,subsection,1,textbench for stimulator,p1}, pagecommand={}]{files2_tb_axis-v.pdf}
+
+\end{document}

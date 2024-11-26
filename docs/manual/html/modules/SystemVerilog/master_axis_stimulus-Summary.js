@@ -1,0 +1,1 @@
+﻿NDFramePage.OnPageTitleLoaded("SystemVerilogModule:master_axis_stimulus","master_axis_stimulus");NDSummary.OnSummaryLoaded("SystemVerilogModule:master_axis_stimulus",[["SystemVerilog","SystemVerilog"]],[["Modules","Module"]],[[23,0,0,"master_axis_stimulus"]]);

@@ -1,0 +1,1 @@
+﻿NDMenu.OnSectionLoaded("modules.js",[[1,"clk_stim"],[1,"master_axis_stim"],[1,"master_axis_stimulus"],[1,"slave_axis_stim"],[1,"slave_axis_stimulus"],[1,"tb_axis"]]);

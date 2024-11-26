@@ -1,59 +1,84 @@
 //******************************************************************************
-/// @file    tm_stim_axis.v
-/// @author  JAY CONVERTINO
-/// @date    2022.10.24
-/// @brief   Generic AXIS test bench modules (stimulus) with verification.
-/// @details All modules for AXIS test bench top are here. There will be loop of
-///          tests the axis core must pass. In these tests is where the end user
-///          must alter the checks if the input does not equal the output. As 
-///          these were designed with a FIFO in mind.
-///
-/// @LICENSE MIT
-///  Copyright 2022 Jay Convertino
-///
-///  Permission is hereby granted, free of charge, to any person obtaining a copy
-///  of this software and associated documentation files (the "Software"), to 
-///  deal in the Software without restriction, including without limitation the
-///  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
-///  sell copies of the Software, and to permit persons to whom the Software is 
-///  furnished to do so, subject to the following conditions:
-///
-///  The above copyright notice and this permission notice shall be included in 
-///  all copies or substantial portions of the Software.
-///
-///  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
-///  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-///  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-///  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-///  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-///  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-///  IN THE SOFTWARE.
+//  file:     tm_stim_axis.v
+//
+//  author:   JAY CONVERTINO
+//
+//  date:     2022/10/24
+//
+//  about:    Brief
+//  All modules for AXIS test bench top are here. There will be loop of
+//  tests the axis core must pass. In these tests is where the end user
+//  must alter the checks if the input does not equal the output. As
+//  these were designed with a FIFO in mind.
+//
+//  license: License MIT
+//  Copyright 2022 Jay Convertino
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to
+//  deal in the Software without restriction, including without limitation the
+//  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+//  sell copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+//  IN THE SOFTWARE.
 //******************************************************************************
 
 `timescale 1 ns/10 ps
-  
-//******************************************************************************
-/// @brief Simulator core to read file data, and output it over master axis dut.
-//******************************************************************************
+
+/*
+ * Module: slave_axis_stimulus
+ *
+ * Simulator core to read file data, and output it over master axis dut.
+ *
+ * Parameters:
+ *
+ * BUS_WIDTH    - bus width in bytes for data bus
+ * USER_WIDTH   - user width in bits
+ * DEST_WIDTH   - dest width in bits
+ * BYTE_SWAP    - swap bytes fed to the DUT
+ * FILE         - input file name
+ *
+ * Ports:
+ *
+ * m_axis_aclk    - master axis clock
+ * m_axis_arstn   - master axis negative reset
+ * m_axis_tvalid  - master axis data valid active high
+ * m_axis_tready  - master axis, is the input device ready?
+ * m_axis_tdata   - master axis data input.
+ * m_axis_tkeep   - master axis byte indicator
+ * m_axis_tlast   - master axis data is last word
+ * m_axis_tuser   - master axis user defined
+ * m_axis_tdest   - master axis desitination
+ * eof            - end of input file has been reached.
+ */
 module slave_axis_stimulus #(
-    parameter BUS_WIDTH   = 1,          /**< bus width in bytes for data bus */
-    parameter USER_WIDTH  = 1,          /**< user width in bits */
-    parameter DEST_WIDTH  = 1,          /**< dest width in bits */
-    parameter BYTE_SWAP   = 0,          /**< swap bytes fed to the DUT */
-    parameter FILE        = "test.bin"  /**< input file name    */
+    parameter BUS_WIDTH   = 1,
+    parameter USER_WIDTH  = 1,
+    parameter DEST_WIDTH  = 1,
+    parameter BYTE_SWAP   = 0,
+    parameter FILE        = "test.bin"
   )
   (
-    // master axis port
-    input                           m_axis_aclk,  /**< master axis clock */
-    input                           m_axis_arstn, /**< master negative reset */
-    output reg                      m_axis_tvalid,/**< master data valid */
-    input                           m_axis_tready,/**< master ready, is the next core ready */
-    output      [(BUS_WIDTH*8)-1:0] m_axis_tdata, /**< master data */
-    output reg  [BUS_WIDTH-1:0]     m_axis_tkeep, /**< master keep */
-    output reg                      m_axis_tlast, /**< master last word of data */
-    output reg  [USER_WIDTH-1:0]    m_axis_tuser, /**< master user port */
-    output reg  [DEST_WIDTH-1:0]    m_axis_tdest, /**< master destination port */
-    output reg                      eof           /**< end of file flag */
+    input                           m_axis_aclk,
+    input                           m_axis_arstn,
+    output reg                      m_axis_tvalid,
+    input                           m_axis_tready,
+    output      [(BUS_WIDTH*8)-1:0] m_axis_tdata,
+    output reg  [BUS_WIDTH-1:0]     m_axis_tkeep,
+    output reg                      m_axis_tlast,
+    output reg  [USER_WIDTH-1:0]    m_axis_tuser,
+    output reg  [DEST_WIDTH-1:0]    m_axis_tdest,
+    output reg                      eof
   );
   
   // local parameters
@@ -146,29 +171,50 @@ module slave_axis_stimulus #(
   
 endmodule
 
-//******************************************************************************
-/// @brief  Simulator core to write file data, from input over slave axis dut.
-///         This module will keep a constant ready to the dut.
-//******************************************************************************
+/*
+ * Module: master_axis_stimulus
+ *
+ * Simulator core to write file data, from input over slave axis dut. This module will keep a constant ready to the dut.
+ *
+ * Parameters:
+ *
+ * BUS_WIDTH    - bus width in bytes for data bus
+ * USER_WIDTH   - user width in bits
+ * DEST_WIDTH   - dest width in bits
+ * RAND_READY   - random ready if set anything other than 0
+ * FILE         - output file name
+ *
+ * Ports:
+ *
+ * s_axis_aclk    - slave axis clock
+ * s_axis_arstn   - slave axis negative reset
+ * s_axis_tvalid  - slave data valid
+ * s_axis_tready  - slave ready
+ * s_axis_tdata   - slave data
+ * s_axis_tkeep   - slave keep
+ * s_axis_tlast   - slave last word of data
+ * s_axis_tuser   - slave user port
+ * s_axis_tdest   - slave destination port
+ * eof            - end of file will trigger $finish to end sim
+ */
 module master_axis_stimulus #(
-    parameter BUS_WIDTH   = 1,        /**< bus width in bytes for data bus */
-    parameter USER_WIDTH  = 1,        /**< user width in bits */
-    parameter DEST_WIDTH  = 1,        /**< dest width in bits */
-    parameter RAND_READY  = 0,        /**< random ready if set anything other than 0 */
-    parameter FILE        = "out.bin" /**< output file name   */
+    parameter BUS_WIDTH   = 1,
+    parameter USER_WIDTH  = 1,
+    parameter DEST_WIDTH  = 1,
+    parameter RAND_READY  = 0,
+    parameter FILE        = "out.bin"
   )
   (
-    // slave axis port
-    input                       s_axis_aclk,  /**< slave axis clock */
-    input                       s_axis_arstn, /**< slave negative reset */
-    input                       s_axis_tvalid,/**< slave data valid */
-    output reg                  s_axis_tready,/**< slave ready, are we ready kids? */
-    input  [(BUS_WIDTH*8)-1:0]  s_axis_tdata, /**< slave data */
-    input  [BUS_WIDTH-1:0]      s_axis_tkeep, /**< slave keep */
-    input                       s_axis_tlast, /**< slave last word of data */
-    input  [USER_WIDTH-1:0]     s_axis_tuser, /**< slave user port */
-    input  [DEST_WIDTH-1:0]     s_axis_tdest, /**< slave destination port */
-    input                       eof           /**< end of file will trigger $finish to end sim */
+    input                       s_axis_aclk,
+    input                       s_axis_arstn,
+    input                       s_axis_tvalid,
+    output reg                  s_axis_tready,
+    input  [(BUS_WIDTH*8)-1:0]  s_axis_tdata,
+    input  [BUS_WIDTH-1:0]      s_axis_tkeep,
+    input                       s_axis_tlast,
+    input  [USER_WIDTH-1:0]     s_axis_tuser,
+    input  [DEST_WIDTH-1:0]     s_axis_tdest,
+    input                       eof
   );
   
   integer num_wrote = 0;
