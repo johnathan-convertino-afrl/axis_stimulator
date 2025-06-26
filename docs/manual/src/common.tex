@@ -32,6 +32,16 @@ output, and input of the device under test. This will stream data through till
 is has read all data. Then once all data has been written AND tlast is set to high
 the writer module will end the simulation.
 
+
+  dep:
+    depend:
+      - AFRL:utility:helper:1.0.0
+
+##### Verilog include the files needed in the module you are using the function in (see src below for list of files and funtions).
+
+`include "util_helper_math.vh"
+
+
 \subsection{Dependencies}
 
 \par

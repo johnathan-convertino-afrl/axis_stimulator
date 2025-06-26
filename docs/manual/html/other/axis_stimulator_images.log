@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.10.21)  25 NOV 2024 20:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.10.21)  26 NOV 2024 17:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -208,8 +208,7 @@ Package: preview 2017/04/24 12.2 (AUCTeX/preview-latex)
 File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count278
 \l__pdf_internal_box=\box55
-)
-No file axis_stimulator_images.aux.
+) (./axis_stimulator_images.aux)
 \openout1 = `axis_stimulator_images.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 98.
@@ -272,6 +271,7 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 98.
 LaTeX Info: Redefining \pageref on input line 98.
 LaTeX Info: Redefining \nameref on input line 98.
+(./axis_stimulator_images.out) (./axis_stimulator_images.out)
 \@outlinefile=\write4
 \openout4 = `axis_stimulator_images.out'.
 
@@ -321,19 +321,14 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 
 :tex2html_wrap_inline89:lthtmlCropMarkDepth:=0.0pt:1ex:=4.30554pt
 [2] (./axis_stimulator_images.aux)
+Package rerunfilecheck Info: File `axis_stimulator_images.out' has not changed.
 
-Package rerunfilecheck Warning: File `axis_stimulator_images.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `axis_stimulator_images.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  D41D8CD98F00B204E9800998ECF8427E;0.
+(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 10178 strings out of 480247
- 157580 string characters out of 5896150
- 444126 words of memory out of 5000000
+ 10184 strings out of 480247
+ 157742 string characters out of 5896150
+ 444369 words of memory out of 5000000
  28029 multiletter control sequences out of 15000+600000
  469259 words of font info for 28 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191

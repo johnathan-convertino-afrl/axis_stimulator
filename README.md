@@ -1,5 +1,6 @@
 # AFRL Simulator Stimulator for AXIS
 ### AXIS Stimulator modules
+---
 
 ![image](docs/manual/img/AFRL.png)
 
